@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+	   .red {color:red;}
+	   li,ul {
+		   list-style: none;
+		   padding: 0;
+		   margin: 0;
+	   }
+	   li {
+		   cursor: pointer;
+	   }
+	   li:hovern{
+		   background: #ccc;
+	   }
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body onload="Init()">
+<center>
+<table>
+  <tr>
+	<td>
+		<input name="txt" style="width:100px" onkeyup="SelectTip()" id="txts">
+	</td>
+  </tr>
+  <tr>
+    <td>
+    <span id="demo" style="display:none">
+		<ul name="demo" style="width:100px" size=5 id="sel">
+			<!-- <li>1</li>
+			<li>12</li> -->
+		</ul>
+	</span>
+    </td>
+  </tr>
+</table>
+<hr>
+<script language="javascript">
+	
+var initArr = [];
+
+$(function(){
+	$('#txts').click(function() {
+		if($('#demo').css("display")=="block"){
+             $('#demo').css('display','none');
+        }else{
+			 $('#demo').css('display','block');
+			 if(initArr.length === 0) {
+				 getInitArr(showInitArr);
+			 }
+		}
+		
+	}); 
+	$('#demo').blur(function() {
+        $('#demo').css('display','none');
+	});
+	$(document).click(function(){
+		$("#demo").hide();
+	});
+	$("#txts").click(function(event){
+		event.stopPropagation();
+	});
+});
+
+function getInitArr(callback) {      
+    setTimeout(function(){
+		initArr = [
+			{id: 1,text: '1'},
+			{id: 2,text: '12'},
+			{id: 3,text: '123'},
+			{id: 4,text: 'a'},
+			{id: 5,text: 'ab'},
+			{id: 6,text: 'abc'},
+			{id: 7,text: '我'},
+			{id: 8,text: '我没'},
+			{id: 9,text: '我没有'},
+			{id: 10,text: '我不知道'}
+	    ]
+    },1000);  
+    var timer = setInterval(function(){  
+        if(initArr.length)  
+        {  
+            clearInterval(timer);  
+            callback(); 
+        }  
+    },100);  
+}
+function showInitArr() {
+	for(i=0;i<initArr.length;i++) {
+		var item = "<li>"+initArr[i].text+"</li>";
+		$("#sel").append(item);
+	}
+}
+function Init(){
+	var SelectObj=$("li");
+	for(i=0;i<SelectObj.length;i++){
+		initArr[i] = SelectObj[i].innerText;
+	}
+}
+
+
+function SelectTip(){  
+	var TxtObj=document.getElementById("txts");
+	$('#sel').empty();
+	var Arr='';
+	for(i=0;i<initArr.length;i++)
+	{	
+		if(initArr[i].text.indexOf(TxtObj.value)==0)
+		{
+			Arr="<li>"+cutStr(TxtObj.value, initArr[i].text)+"</li>";
+			$("#sel").append(Arr);
+		}
+	}
+}
+
+function cutStr(someStr, allStr) {
+	var start = allStr.indexOf(someStr);
+	var end = start + someStr.length;
+	var restStr = allStr.substring(end);
+	var result = '<span class="red">' + someStr + '</span>' +restStr;
+	return result;
+}
+
+for(i=0;i<$('li').length;i++){
+	$('li')[i].onclick = function (){
+		var TxtObj=document.getElementById("txts");
+		TxtObj.value= event.target.innerText;
+		$('#demo').css('display','none');
+	}
+}
+
+</script>
+</body>
