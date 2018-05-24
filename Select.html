@@ -13,13 +13,13 @@
 	   li {
 		   cursor: pointer;
 	   }
-	   li:hovern{
+	   li:hover{
 		   background: #ccc;
 	   }
 	</style>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
-<body onload="Init()">
+<body>
 <center>
 <table>
   <tr>
@@ -66,6 +66,7 @@ $(function(){
 	});
 });
 
+//模拟异步获取数据
 function getInitArr(callback) {      
     setTimeout(function(){
 		initArr = [
@@ -80,7 +81,7 @@ function getInitArr(callback) {
 			{id: 9,text: '我没有'},
 			{id: 10,text: '我不知道'}
 	    ]
-    },1000);  
+    },700);  
     var timer = setInterval(function(){  
         if(initArr.length)  
         {  
@@ -89,20 +90,16 @@ function getInitArr(callback) {
         }  
     },100);  
 }
+
+//异步获取后的回调函数
 function showInitArr() {
 	for(i=0;i<initArr.length;i++) {
-		var item = "<li>"+initArr[i].text+"</li>";
+		var item = '<li onclick="itemClick()">'+initArr[i].text+"</li>";
 		$("#sel").append(item);
 	}
 }
-function Init(){
-	var SelectObj=$("li");
-	for(i=0;i<SelectObj.length;i++){
-		initArr[i] = SelectObj[i].innerText;
-	}
-}
 
-
+//输入后前缀匹配
 function SelectTip(){  
 	var TxtObj=document.getElementById("txts");
 	$('#sel').empty();
@@ -111,12 +108,13 @@ function SelectTip(){
 	{	
 		if(initArr[i].text.indexOf(TxtObj.value)==0)
 		{
-			Arr="<li>"+cutStr(TxtObj.value, initArr[i].text)+"</li>";
+			Arr='<li onclick="itemClick()">'+cutStr(TxtObj.value, initArr[i].text)+"</li>";
 			$("#sel").append(Arr);
 		}
 	}
 }
 
+//切割关键字符串为红色
 function cutStr(someStr, allStr) {
 	var start = allStr.indexOf(someStr);
 	var end = start + someStr.length;
@@ -125,12 +123,9 @@ function cutStr(someStr, allStr) {
 	return result;
 }
 
-for(i=0;i<$('li').length;i++){
-	$('li')[i].onclick = function (){
-		var TxtObj=document.getElementById("txts");
-		TxtObj.value= event.target.innerText;
-		$('#demo').css('display','none');
-	}
+function itemClick() {
+	$('#txts').val(event.target.innerText);
+	$('#demo').css('display','none');
 }
 
 </script>
